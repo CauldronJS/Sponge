@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cauldronjs</groupId>
+  <artifactId>CauldronSponge</artifactId>
+  <version>1.0.0</version>
+
+  <name>Cauldron-Sponge</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+
+    <project.buildNumber>SNAPSHOT</project.buildNumber>
+    <project.versionCode>${project.version}-${project.buildNumber}</project.versionCode>
+    <project.finalBaseName>${project.name}-${project.version}</project.finalBaseName>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>sponge</id>
+      <url>https://repo.spongepowered.org/maven</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.cauldronjs</groupId>
+      <artifactId>CauldronAPI</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.spongepowered</groupId>
+      <artifactId>spongeapi</artifactId>
+      <version>7.1.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <defaultGoal>clean package</defaultGoal>
+    <finalName>${project.finalBaseName}-noshade</finalName>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>./src/main/resources</directory>
+      </resource>
+    </resources>
+    <pluginManagement>      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <!-- Clean the target folder content -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+      <!-- Compile and include classes -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <!-- Unit testing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+          <!-- Don't trim stack traces -->
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
+      </plugin>
+      <!-- Generate a jar containing classes and resources -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+      <!-- Generate a jar containing the java sources -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <configuration>
+          <finalName>${project.finalBaseName}</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Generate a jar containing classes, resources and shaded libraries -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.1</version>
+        <configuration>
+          <!-- Don't create the reduced pom file, as we don't deploy the shaded jar -->
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <!-- Deploy the non shaded jar as main artifact -->
+          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <!-- Use the base jar name, to help server owners download the right jar -->
+          <finalName>${project.finalBaseName}</finalName>
+
+          <!-- Relocate shaded libraries that might cause class conflicts with other plugins -->
+          <relocations>
+            <relocation>
+              <pattern>com.comphenix.packetwrapper</pattern>
+              <shadedPattern>me.conji.cauldron.libs.com.comphenix.packetwrapper</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>net.querz.nbt</pattern>
+              <shadedPattern>me.conji.cauldron.libs.net.querz.nbt</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>io.sentry</pattern>
+              <shadedPattern>me.conji.cauldron.libs.io.sentry</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.slf4j</pattern>
+              <shadedPattern>me.conji.cauldron.libs.org.slf4j</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>javax.inject</pattern>
+              <shadedPattern>me.conji.cauldron.libs.javax.inject</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>ch.jalu</pattern>
+              <shadedPattern>me.conji.cauldron.libs.ch.jalu</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.apache.commons</pattern>
+              <shadedPattern>me.conji.cauldron.libs.org.apache.commons</shadedPattern>
+            </relocation>
+            <relation>
+              <pattern>com.fasterxml.jackson.core</pattern>
+              <shadedPattern>me.conji.cauldron.libs.com.fasterxml.jackson.core</shadedPattern>
+            </relation>
+            <relocation>
+              <pattern>main.java.de.mxro.process</pattern>
+              <shadedPattern>me.conji.cauldron.libs.main.java.de.mxro.process</shadedPattern>
+            </relocation>
+          </relocations>
+
+          <filters>
+            <!-- Ignore manifest signatures for shading the project into an uber-jar to fix -->
+            <!-- "Invalid signature file digest for Manifest main attributes" -->
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>META-INF/*.SF</exclude>
+                <exclude>META-INF/*.DSA</exclude>
+                <exclude>META-INF/*.RSA</exclude>
+              </excludes>
+            </filter>
+          </filters>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>2.2.5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+          </execution>
+        </executions>
+
+        <configuration>
+          <skipPoms>false</skipPoms>
+          <runOnlyOnce>true</runOnlyOnce>
+          <injectAllReactorProjects>true</injectAllReactorProjects>
+          <failOnNoGitDirectory>false</failOnNoGitDirectory>
+          <gitDescribe>
+            <tags>true</tags>
+          </gitDescribe>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

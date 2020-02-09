@@ -1,0 +1,8 @@
+.git
+.idea
+.project
+.settings
+.vscode
+jars
+target
+*.iml
