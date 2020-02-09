@@ -19,6 +19,7 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -55,7 +56,8 @@ public class Cauldron implements CauldronAPI {
   }
 
   @Listener
-  public void onServerStart(GameStartedServerEvent event) {
+  public void onServerStart(GameInitializationEvent event) {
+    this.executorService = this.sponge.getScheduler().createSyncExecutor(this);
     try {
       PathHelpers.tryInitializeCwd(this);
     } catch (IOException ex) {
@@ -79,7 +81,7 @@ public class Cauldron implements CauldronAPI {
 
   @Override
   public File cwd() {
-    return this.configDirectory.toFile();
+    return new File("D:\\dev\\cauldron-scripts");
   }
 
   @Override

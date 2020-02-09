@@ -162,44 +162,6 @@
           <finalName>${project.finalBaseName}</finalName>
 
           <!-- Relocate shaded libraries that might cause class conflicts with other plugins -->
-          <relocations>
-            <relocation>
-              <pattern>com.comphenix.packetwrapper</pattern>
-              <shadedPattern>me.conji.cauldron.libs.com.comphenix.packetwrapper</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>net.querz.nbt</pattern>
-              <shadedPattern>me.conji.cauldron.libs.net.querz.nbt</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>io.sentry</pattern>
-              <shadedPattern>me.conji.cauldron.libs.io.sentry</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>org.slf4j</pattern>
-              <shadedPattern>me.conji.cauldron.libs.org.slf4j</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>javax.inject</pattern>
-              <shadedPattern>me.conji.cauldron.libs.javax.inject</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>ch.jalu</pattern>
-              <shadedPattern>me.conji.cauldron.libs.ch.jalu</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>org.apache.commons</pattern>
-              <shadedPattern>me.conji.cauldron.libs.org.apache.commons</shadedPattern>
-            </relocation>
-            <relation>
-              <pattern>com.fasterxml.jackson.core</pattern>
-              <shadedPattern>me.conji.cauldron.libs.com.fasterxml.jackson.core</shadedPattern>
-            </relation>
-            <relocation>
-              <pattern>main.java.de.mxro.process</pattern>
-              <shadedPattern>me.conji.cauldron.libs.main.java.de.mxro.process</shadedPattern>
-            </relocation>
-          </relocations>
 
           <filters>
             <!-- Ignore manifest signatures for shading the project into an uber-jar to fix -->
